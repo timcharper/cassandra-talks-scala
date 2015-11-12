@@ -12,6 +12,8 @@ import scala.util.{Success, Try}
   We receive a lambda for how to get the future result, because
   Cassandra ResultSetFuture has a special method to get the result
   with better exceptions.
+
+  Shamelessly inspired by https://github.com/eigengo/activator-akka-cassandra/blob/master/src/main/scala/core/cassandra.scala
   */
 private [timcharper] class ScalaListenableFuture[T, F <: ListenableFuture[T]](
   future: F,
