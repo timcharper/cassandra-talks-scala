@@ -6,10 +6,10 @@ description := "Simple integration library which enriches a Cassandra session so
 
 scalaVersion := "2.11.7"
 
-version := "0.1"
+version := Version.version
 
 libraryDependencies := Seq(
-  "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.8",
+  "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.9",
   "com.typesafe.akka" % "akka-stream-experimental_2.11" % "2.0-M1"
 )
 
