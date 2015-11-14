@@ -4,7 +4,7 @@ Simple integration library which enriches a Cassandra Java Driver Session so you
 
 # Install
 
-    libraryDependencies += "com.timcharper" %% "cassandra-talks-scala" % "0.2"
+    libraryDependencies += "com.timcharper" %% "cassandra-talks-scala" % "0.3"
 
 # Depends on
 

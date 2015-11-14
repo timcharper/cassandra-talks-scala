@@ -14,14 +14,14 @@ import scala.concurrent.Future
   
   See [[ResultSetProducer$apply]]
   */
-private [this] class ResultSetSource(runQuery: () => Future[ResultSet]) extends ActorPublisher[Row] with Stash {
+private [this] class ResultSetSource(runQuery: Future[ResultSet]) extends ActorPublisher[Row] with Stash {
   import akka.stream.actor.ActorPublisherMessage._
   import akka.pattern.pipe
 
   import context.dispatcher
 
   override def preStart(): Unit = {
-    runQuery() pipeTo self
+    runQuery pipeTo self
   }
   def receive = {
     case rs: ResultSet =>
@@ -60,7 +60,25 @@ object ResultSetSource {
   def apply(runQuery: () => Future[ResultSet]): Source[Row, Unit] =
     Source.actorPublisher[Row](
       Props {
-        new ResultSetSource(runQuery)
+        new ResultSetSource(runQuery())
       }).
       mapMaterializedValue(_ => ())
+
+  /**
+    Returns a Source that is only materializable once; future attempts
+    at materialization fail the stream.
+    
+    Note, the ResultSet is a mutable object whose mutability will be
+    owned by the Stream. You should leave it alone once you hand it
+    off!
+    */
+  def apply(results: Future[ResultSet]): Source[Row, Unit] = {
+    var materialized = false
+    apply { () =>
+      if (materialized)
+        throw new RuntimeException("Cowardly refusing to stream the same Cassandra ResultSet twice.")
+      materialized = true
+      results
+    }
+  }
 }

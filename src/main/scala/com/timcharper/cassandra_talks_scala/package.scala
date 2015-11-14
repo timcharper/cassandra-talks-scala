@@ -21,6 +21,19 @@ private [timcharper] trait CassandraTalksScalaLowPriorityImplicits {
 }
 
 package object cassandra_talks_scala extends CassandraTalksScalaLowPriorityImplicits {
+
+  import scala.concurrent.ExecutionContext
+
+
+  // WARNING!!! Don't block inside of Runnable (Future) that uses this.
+  private[cassandra_talks_scala] object SameThreadExecutionContext extends ExecutionContext {
+    def execute(r: Runnable): Unit =
+      r.run()
+    override def reportFailure(t: Throwable): Unit =
+      throw new IllegalStateException("problem in op_rabbit internal callback", t)
+  }
+
+
   /**
     Implicit class which adds the method `toScalaFuture` to ResultSetFuture
     */
