@@ -10,7 +10,7 @@ import scala.concurrent.Future
 /**
   This is a Akka Stream producer, which sends async Cassandra results
   as soon as they are ready, allowing us to stream results from
-  Cassandra using reactive streams and not blocking.
+  Cassandra using reactive streams and not block.
   
   See [[ResultSetProducer$apply]]
   */
@@ -38,8 +38,7 @@ private [this] class ResultSetSource(runQuery: Future[ResultSet]) extends ActorP
 
       if (resultSet.isExhausted())
         context.stop(self)
-
-      if (totalDemand > 0)
+      else if (totalDemand > 0)
         resultSet.
           fetchMoreResults().
           toScalaFuture.
@@ -75,9 +74,11 @@ object ResultSetSource {
   def apply(results: Future[ResultSet]): Source[Row, Unit] = {
     var materialized = false
     apply { () =>
-      if (materialized)
-        throw new RuntimeException("Cowardly refusing to stream the same Cassandra ResultSet twice.")
-      materialized = true
+      results.synchronized {
+        if (materialized)
+          throw new RuntimeException("Cowardly refusing to stream the same Cassandra ResultSet twice.")
+        materialized = true
+      }
       results
     }
   }
