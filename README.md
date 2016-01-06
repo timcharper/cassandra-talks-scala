@@ -39,3 +39,15 @@ The `executeStream` method presently lacks a mechanism to determine the paging o
     }
 
 Streaming backpressure causes the driver to fetch pages from Cassandra more slowly.
+
+# Versions
+
+## 0.4:
+
+- akka-stream: 2.0.x
+- cassandra-drive-core: 2.1.x
+
+## 0.3:
+
+- akka-stream: 2.0-M1
+- cassandra-drive-core: 2.1.x
