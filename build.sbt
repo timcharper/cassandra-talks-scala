@@ -9,8 +9,8 @@ scalaVersion := "2.11.7"
 version := Version.version
 
 libraryDependencies := Seq(
-  "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.9",
-  "com.typesafe.akka" % "akka-stream-experimental_2.11" % "2.0.1"
+  "com.datastax.cassandra" % "cassandra-driver-core" % "3.0.0",
+  "com.typesafe.akka" % "akka-stream-experimental_2.11" % "2.0.3"
 )
 
 homepage := Some(url("https://github.com/timcharper/cassandra-talks-scala"))
