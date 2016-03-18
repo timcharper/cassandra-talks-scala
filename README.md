@@ -4,14 +4,14 @@ Simple integration library which enriches a Cassandra Java Driver Session so you
 
 # Install
 
-    libraryDependencies += "com.timcharper" %% "cassandra-talks-scala" % "0.3"
+    libraryDependencies += "com.timcharper" %% "cassandra-talks-scala" % "0.6"
 
 # Depends on
 
 ```
 libraryDependencies := Seq(
   "com.datastax.cassandra" % "cassandra-driver-core" % "2.1.9",
-  "com.typesafe.akka" % "akka-stream-experimental_2.11" % "2.0-M1"
+  "com.typesafe.akka" % "akka-stream_2.11" % "2.4.2"
 )
 ```
 
@@ -41,6 +41,10 @@ The `executeStream` method presently lacks a mechanism to determine the paging o
 Streaming backpressure causes the driver to fetch pages from Cassandra more slowly.
 
 # Versions
+
+## 0.6:
+
+- akka-stream: 2.4.x
 
 ## 0.4:
 
