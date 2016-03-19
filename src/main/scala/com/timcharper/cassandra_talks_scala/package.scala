@@ -1,5 +1,6 @@
 package com.timcharper
 
+import akka.NotUsed
 import akka.actor.{Props, Stash}
 import akka.stream.scaladsl.Source
 import com.datastax.driver.core.{PreparedStatement, RegularStatement, ResultSet, ResultSetFuture, Row, Session, Statement}
@@ -9,9 +10,9 @@ import scala.concurrent.{CanAwait, Future}
 
 private [timcharper] trait CassandraTalksScalaLowPriorityImplicits {
   /**
-    Implicit class which adds the method `toScalaFuture` to a ListenableFuture[T].
+    *Implicit class which adds the method `toScalaFuture` to a ListenableFuture[T].
     
-    Lower priority; ResultSetFutureConversion takes precedence.
+    *Lower priority; ResultSetFutureConversion takes precedence.
     */
   implicit class ListenableFutureConversion[T](future: ListenableFuture[T]) {
     def toScalaFuture: Future[T] = {
@@ -35,7 +36,7 @@ package object cassandra_talks_scala extends CassandraTalksScalaLowPriorityImpli
 
 
   /**
-    Implicit class which adds the method `toScalaFuture` to ResultSetFuture
+    *Implicit class which adds the method `toScalaFuture` to ResultSetFuture
     */
   implicit class ResultSetFutureConversion(future: ResultSetFuture) {
     def toScalaFuture: Future[ResultSet] = {
@@ -64,7 +65,6 @@ package object cassandra_talks_scala extends CassandraTalksScalaLowPriorityImpli
      * @param values values required for the execution of {@code query}. See
      * [[http://docs.datastax.com/en/drivers/java/2.1/com/datastax/driver/core/SimpleStatement.html#SimpleStatement-java.lang.String-java.lang.Object...- SimpleStatement#SimpleStatement(String, Object...) SimpleStatement]] for more detail.
      * @return a future on the result of the query.
-     *
      * @throws [[http://docs.datastax.com/en/drivers/java/2.1/com/datastax/driver/core/exceptions/UnsupportedFeatureException.html UnsupportedFeatureException]] if version 1 of the protocol
      * is in use (i.e. if you've force version 1 through [[http://docs.datastax.com/en/drivers/java/2.1/com/datastax/driver/core/Cluster.Builder.html#withProtocolVersion-com.datastax.driver.core.ProtocolVersion- Cluster.Builder.withProtocolVersion]]
      * or you use Cassandra 1.2).
@@ -87,7 +87,6 @@ package object cassandra_talks_scala extends CassandraTalksScalaLowPriorityImpli
      *
      * @param statement the CQL query to execute (that can be either any [[http://docs.datastax.com/en/drivers/java/2.1/com/datastax/driver/core/Statement.html Statement]].
      * @return a future on the result of the query.
-     *
      * @throws [[http://docs.datastax.com/en/drivers/java/2.1/com/datastax/driver/core/exceptions/UnsupportedFeatureException.html UnsupportedFeatureException]] if the protocol version 1 is in use and
      * a feature not supported has been used. Features that are not supported by
      * the version protocol 1 include: BatchStatement, ResultSet paging and binary
@@ -103,31 +102,31 @@ package object cassandra_talks_scala extends CassandraTalksScalaLowPriorityImpli
       session.prepareAsync(statement).toScalaFuture
 
     /**
-      Like executeFuture, but returns a stream of Rows.
+      *Like executeFuture, but returns a stream of Rows.
      
-      Note - the query is re-executed each time the stream is run.
+      *Note - the query is re-executed each time the stream is run.
       */
-    def executeStream(query: String): Source[Row, Unit] =
+    def executeStream(query: String): Source[Row, NotUsed] =
       ResultSetSource { () =>
         session.executeFuture(query)
       }
 
     /**
-      Like executeFuture, but returns a stream of Rows.
+      *Like executeFuture, but returns a stream of Rows.
      
-      Note - the query is re-executed each time the stream is run.
+      *Note - the query is re-executed each time the stream is run.
       */
-    def executeStream(query: String, args: Object*): Source[Row, Unit] =
+    def executeStream(query: String, args: Object*): Source[Row, NotUsed] =
       ResultSetSource { () =>
         executeFuture(query, args : _*)
       }
 
     /**
-      Like executeFuture, but returns a stream of Rows.
+      *Like executeFuture, but returns a stream of Rows.
      
-      Note - the query is re-executed each time the stream is run.
+      *Note - the query is re-executed each time the stream is run.
       */
-    def executeStream(statement: Statement): Source[Row, Unit] =
+    def executeStream(statement: Statement): Source[Row, NotUsed] =
       ResultSetSource { () =>
         executeFuture(statement)
       }
