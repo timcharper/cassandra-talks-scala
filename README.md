@@ -45,13 +45,19 @@ Streaming backpressure causes the driver to fetch pages from Cassandra more slow
 ## 0.6:
 
 - akka-stream: 2.4.x
+- cassandra-drive-core: 3.0.x
+
+## 0.5:
+
+- akka-stream-experimental: 2.0.x
+- cassandra-drive-core: 3.0.x
 
 ## 0.4:
 
-- akka-stream: 2.0.x
+- akka-stream-experimental: 2.0.x
 - cassandra-drive-core: 2.1.x
 
 ## 0.3:
 
-- akka-stream: 2.0-M1
+- akka-stream-experimental: 2.0-M1
 - cassandra-drive-core: 2.1.x
